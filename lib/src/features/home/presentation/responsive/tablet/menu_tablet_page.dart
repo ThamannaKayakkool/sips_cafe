@@ -1,0 +1,82 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:sips_cafe/src/core/common/widgets/rich_text_widget.dart';
+import 'package:sips_cafe/src/core/common/widgets/menu_item_widget.dart';
+import 'package:sips_cafe/src/core/common/widgets/search_text_field_widget.dart';
+import 'package:sips_cafe/src/core/common/widgets/text_widget.dart';
+import 'package:sips_cafe/src/core/config/colors.dart';
+import 'package:sips_cafe/src/core/config/constants.dart';
+import 'package:sips_cafe/src/core/utils/utils.dart';
+import 'package:sips_cafe/src/features/home/presentation/responsive/tablet/order_tablet_page.dart';
+import 'package:sips_cafe/src/features/home/presentation/responsive/tablet/widget/menu_container_tablet_widget.dart';
+
+class MenuTabletPage extends HookWidget {
+  const MenuTabletPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedCategory = useState("All Menu");
+
+    final filteredMenu = useMemoized(() {
+      if (selectedCategory.value == "All Menu") {
+        return menuAllItem;
+      }
+      return menuAllItem.where((item) =>
+      item["category"] == selectedCategory.value).toList();
+    }, [selectedCategory.value]);
+
+    Size screenSize = Utils().getScreenSize(context);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: screenSize.width * 0.01,
+          vertical: screenSize.height * 0.03,
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                RichTextWidget(fontSize: screenSize.width * 0.03),
+                kSizedBoxW35,
+                SearchTextFieldWidget(
+                  width: screenSize.width * 0.3,
+                  height: screenSize.height * 0.036, hintFontSize: screenSize.width * 0.015, textFontSize: screenSize.width * 0.015,
+                ),
+                const Spacer(),
+                IconButton(onPressed: () {
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderTabletPage(),));
+                },
+                    icon: Icon(Icons.shopping_cart_outlined,
+                      color: ColorsManager.greenColor,))
+              ],
+            ),
+            kSizedBox25,
+            TextWidget(
+              title: 'Categories',
+              fontSize: screenSize.width * 0.02,
+            ),
+            kSizedBox25,
+            MenuContainerTabletWidget(
+              selectedCategory: selectedCategory.value,
+              category: category,
+              onCategorySelected: (category) {
+                selectedCategory.value = category;
+              },
+            ),
+            kSizedBox25,
+            TextWidget(
+              title: 'Special menu for you',
+              fontSize: screenSize.width * 0.02,
+            ),
+            kSizedBox25,
+            MenuItemDesktopWidget(menuItems: filteredMenu,
+              titleFontSize: screenSize.width * 0.015,
+              subTitleFontSize: screenSize.width * 0.013,iconSize: screenSize.width * 0.02,),
+          ],
+        ),
+      ),
+    );
+  }
+
+}
