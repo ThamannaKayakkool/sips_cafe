@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sips_cafe/src/core/config/colors.dart';
 import 'package:sips_cafe/src/core/config/styles.dart';
 import 'package:sips_cafe/src/core/utils/utils.dart';
-import 'package:sips_cafe/src/features/home/presentation/bloc/cart_bloc.dart';
+import 'package:sips_cafe/src/features/home/presentation/bloc/cart/cart_bloc.dart';
 
 class MenuItemDesktopWidget extends StatelessWidget {
   final List<Map<String, dynamic>> menuItems;

@@ -7,7 +7,7 @@ import 'package:sips_cafe/src/features/home/domain/repositories/cart_repository.
 import 'package:sips_cafe/src/features/home/domain/use_cases/add_item.dart';
 import 'package:sips_cafe/src/features/home/domain/use_cases/delete_item.dart';
 import 'package:sips_cafe/src/features/home/domain/use_cases/get_cart_item.dart';
-import 'package:sips_cafe/src/features/home/presentation/bloc/cart_bloc.dart';
+import 'package:sips_cafe/src/features/home/presentation/bloc/cart/cart_bloc.dart';
 
 
 final sl = GetIt.instance;

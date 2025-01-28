@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:sips_cafe/src/core/common/widgets/custom_button_widget.dart';
 import 'package:sips_cafe/src/core/common/widgets/rich_text_widget.dart';
 import 'package:sips_cafe/src/core/common/widgets/text_widget.dart';
+import 'package:sips_cafe/src/features/home/presentation/bloc/menu/menu_bloc.dart';
 import 'package:sips_cafe/src/features/home/presentation/responsive/desktop/widget/menu_container_desktop_widget.dart';
 import 'package:sips_cafe/src/core/common/widgets/menu_item_widget.dart';
 import 'package:sips_cafe/src/features/home/presentation/responsive/desktop/order_desktop_page.dart';
@@ -13,24 +13,13 @@ import 'package:sips_cafe/src/core/config/constants.dart';
 import 'package:sips_cafe/src/core/config/styles.dart';
 import 'package:sips_cafe/src/core/config/values.dart';
 import 'package:sips_cafe/src/core/utils/utils.dart';
-import 'package:sips_cafe/src/features/home/presentation/bloc/cart_bloc.dart';
+import 'package:sips_cafe/src/features/home/presentation/bloc/cart/cart_bloc.dart';
 
-class MenuDesktopPage extends HookWidget {
+class MenuDesktopPage extends StatelessWidget {
   const MenuDesktopPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final selectedCategory = useState("All Menu");
-
-    final filteredMenu = useMemoized(() {
-      if (selectedCategory.value == "All Menu") {
-        return menuAllItem;
-      }
-      return menuAllItem
-          .where((item) => item["category"] == selectedCategory.value)
-          .toList();
-    }, [selectedCategory.value]);
-
     Size screenSize = Utils().getScreenSize(context);
     return Scaffold(
       backgroundColor: ColorsManager.whiteColor,
@@ -47,7 +36,9 @@ class MenuDesktopPage extends HookWidget {
                 kSizedBoxW35,
                 SearchTextFieldWidget(
                   width: screenSize.width * 0.2,
-                  height: screenSize.height * 0.04, hintFontSize: screenSize.width * 0.009, textFontSize: screenSize.width * 0.01,
+                  height: screenSize.height * 0.04,
+                  hintFontSize: screenSize.width * 0.009,
+                  textFontSize: screenSize.width * 0.01,
                 ),
               ],
             ),
@@ -68,11 +59,17 @@ class MenuDesktopPage extends HookWidget {
                           fontSize: screenSize.width * 0.012,
                         ),
                         kSizedBox15,
-                        MenuContainerDesktopWidget(
-                          selectedCategory: selectedCategory.value,
-                          category: category,
-                          onCategorySelected: (category) {
-                            selectedCategory.value = category;
+                        BlocBuilder<MenuBloc, MenuState>(
+                          builder: (context, state) {
+                            return MenuContainerDesktopWidget(
+                              selectedCategory: state.selectedCategory,
+                              category: state.categories,
+                              onCategorySelected: (category) {
+                                context
+                                    .read<MenuBloc>()
+                                    .add(SelectCategoryEvent(category));
+                              },
+                            );
                           },
                         ),
                         kSizedBox25,
@@ -81,10 +78,15 @@ class MenuDesktopPage extends HookWidget {
                           fontSize: screenSize.width * 0.012,
                         ),
                         kSizedBox25,
-                        MenuItemDesktopWidget(
-                          menuItems: filteredMenu,
-                          titleFontSize: screenSize.width * 0.01,
-                          subTitleFontSize: screenSize.width * 0.008, iconSize: screenSize.width * 0.013,
+                        BlocBuilder<MenuBloc, MenuState>(
+                          builder: (context, state) {
+                            return MenuItemDesktopWidget(
+                              menuItems: state.filteredMenu,
+                              titleFontSize: screenSize.width * 0.01,
+                              subTitleFontSize: screenSize.width * 0.008,
+                              iconSize: screenSize.width * 0.013,
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -154,17 +156,21 @@ class MenuDesktopPage extends HookWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                      title: 'Payment', fontSize: screenSize.width * 0.01),
+                    title: 'Payment',
+                    fontSize: screenSize.width * 0.01,
+                  ),
                   kSizedBox10,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextWidget(
-                          title: 'Subtotal',
-                          fontSize: screenSize.width * 0.008),
+                        title: 'Subtotal',
+                        fontSize: screenSize.width * 0.008,
+                      ),
                       TextWidget(
-                          title: '\$${subtotal.toStringAsFixed(2)}',
-                          fontSize: screenSize.width * 0.008),
+                        title: '\$${subtotal.toStringAsFixed(2)}',
+                        fontSize: screenSize.width * 0.008,
+                      ),
                     ],
                   ),
                   kSizedBox4,
@@ -172,11 +178,13 @@ class MenuDesktopPage extends HookWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextWidget(
-                          title: 'Tax (10%)',
-                          fontSize: screenSize.width * 0.008),
+                        title: 'Tax (10%)',
+                        fontSize: screenSize.width * 0.008,
+                      ),
                       TextWidget(
-                          title: '\$${tax.toStringAsFixed(2)}',
-                          fontSize: screenSize.width * 0.008),
+                        title: '\$${tax.toStringAsFixed(2)}',
+                        fontSize: screenSize.width * 0.008,
+                      ),
                     ],
                   ),
                   Divider(
@@ -187,7 +195,9 @@ class MenuDesktopPage extends HookWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextWidget(
-                          title: 'Total', fontSize: screenSize.width * 0.01),
+                        title: 'Total',
+                        fontSize: screenSize.width * 0.01,
+                      ),
                       Text(
                         '\$${total.toStringAsFixed(2)}',
                         style: getSemiBoldStyle(
@@ -231,25 +241,28 @@ class MenuDesktopPage extends HookWidget {
                             ),
                             actions: [
                               CustomButtonWidget(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  text: 'Cancel',
-                                  fontSize: screenSize.width * 0.008),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                text: 'Cancel',
+                                fontSize: screenSize.width * 0.008,
+                              ),
                               CustomButtonWidget(
-                                  onPressed: () {
-                                    context
-                                        .read<CartBloc>()
-                                        .add(ClearCartEvent());
-                                    Navigator.of(context).pop();
-                                    Utils().showSnackBar(
-                                        context: context,
-                                        content: 'Order placed successfully!',
-                                        color: ColorsManager.greenColor,
-                                        fontSize: screenSize.width * 0.009);
-                                  },
-                                  text: 'Place Order',
-                                  fontSize: screenSize.width * 0.008),
+                                onPressed: () {
+                                  context
+                                      .read<CartBloc>()
+                                      .add(ClearCartEvent());
+                                  Navigator.of(context).pop();
+                                  Utils().showSnackBar(
+                                    context: context,
+                                    content: 'Order placed successfully!',
+                                    color: ColorsManager.greenColor,
+                                    fontSize: screenSize.width * 0.009,
+                                  );
+                                },
+                                text: 'Place Order',
+                                fontSize: screenSize.width * 0.008,
+                              ),
                             ],
                           ),
                         );

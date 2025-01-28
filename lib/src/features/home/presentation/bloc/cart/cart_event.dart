@@ -1,6 +1,6 @@
  part of 'cart_bloc.dart';
 
- abstract class CartEvent  extends Equatable{}
+sealed class CartEvent  extends Equatable{}
 
  class AddItemEvent extends CartEvent {
    final int id;

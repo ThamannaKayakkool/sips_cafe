@@ -43,7 +43,6 @@ dependencies:
   path:
   flutter_bloc: ^9.0.0
   get_it: ^8.0.3
-  flutter_hooks: ^0.20.5
 
 
 dev_dependencies:

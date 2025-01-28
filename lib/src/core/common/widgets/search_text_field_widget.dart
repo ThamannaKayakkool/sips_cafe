@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sips_cafe/src/core/config/colors.dart';
 import 'package:sips_cafe/src/core/config/styles.dart';
 import 'package:sips_cafe/src/core/config/values.dart';
 import 'package:sips_cafe/src/core/utils/utils.dart';
+import 'package:sips_cafe/src/features/home/presentation/bloc/menu/menu_bloc.dart';
 
 class SearchTextFieldWidget extends StatelessWidget {
   final double width;
   final double height;
   final double hintFontSize;
   final double textFontSize;
+
   const SearchTextFieldWidget({super.key, required this.width, required this.height, required this.hintFontSize, required this.textFontSize,
   });
 
@@ -19,6 +22,9 @@ class SearchTextFieldWidget extends StatelessWidget {
       width:  width,
       height: height,
       child: TextField(
+        onChanged: (query) {
+          context.read<MenuBloc>().add(SearchMenuEvent(query));
+        },
         textAlignVertical: TextAlignVertical.center,
         cursorHeight: screenSize.height * 0.02,
         cursorColor: ColorsManager.greenColor,
