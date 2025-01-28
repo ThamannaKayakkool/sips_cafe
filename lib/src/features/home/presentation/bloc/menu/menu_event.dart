@@ -24,3 +24,11 @@ class SearchMenuEvent extends MenuEvent{
   List<Object?> get props => [query];
 }
 
+class UpdateGridCountEvent extends MenuEvent{
+  final int gridCount;
+
+  UpdateGridCountEvent(this.gridCount);
+
+  @override
+  List<Object?> get props => [gridCount];
+}

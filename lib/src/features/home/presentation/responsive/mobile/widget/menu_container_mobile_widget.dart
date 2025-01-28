@@ -29,7 +29,7 @@ class MenuContainerMobileWidget extends StatelessWidget {
               onCategorySelected(categoryItem);
             },
             child: Container(
-              width: screenSize.width * 0.2,
+              width: screenSize.width * 0.16,
               decoration: BoxDecoration(
                   color: isSelected? ColorsManager.greenColor :ColorsManager.whiteColor,
                   borderRadius: BorderRadius.circular(AppSize.s4),
@@ -40,13 +40,13 @@ class MenuContainerMobileWidget extends StatelessWidget {
                   Flexible(
                     child: Image.asset(
                       menuItem[index]['image'],
-                      width: screenSize.width * 0.07,
+                      width: screenSize.width * 0.06,
                     ),
                   ),
                   Text(
                     categoryItem,
                     style: getMediumStyle(
-                        fontSize: screenSize.width * 0.03,
+                        fontSize: screenSize.width * 0.025,
                         color: isSelected
                             ? ColorsManager.whiteColor
                             : ColorsManager.blackColor),
@@ -54,7 +54,7 @@ class MenuContainerMobileWidget extends StatelessWidget {
                   Text(
                     "${ menuItem[index]['type']} items",
                     style: getRegularStyle(
-                        fontSize: screenSize.width * 0.028,
+                        fontSize: screenSize.width * 0.018,
                         color: isSelected
                             ? ColorsManager.whiteColor
                             : ColorsManager.blackColor),

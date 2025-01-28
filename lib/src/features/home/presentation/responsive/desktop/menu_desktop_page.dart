@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sips_cafe/src/core/common/widgets/custom_button_widget.dart';
+import 'package:sips_cafe/src/core/common/widgets/custom_icon_button_widget.dart';
 import 'package:sips_cafe/src/core/common/widgets/rich_text_widget.dart';
 import 'package:sips_cafe/src/core/common/widgets/text_widget.dart';
 import 'package:sips_cafe/src/features/home/presentation/bloc/menu/menu_bloc.dart';
 import 'package:sips_cafe/src/features/home/presentation/responsive/desktop/widget/menu_container_desktop_widget.dart';
-import 'package:sips_cafe/src/core/common/widgets/menu_item_widget.dart';
+import 'package:sips_cafe/src/features/home/presentation/responsive/desktop/widget/menu_item_desktop_widget.dart';
 import 'package:sips_cafe/src/features/home/presentation/responsive/desktop/order_desktop_page.dart';
 import 'package:sips_cafe/src/core/common/widgets/search_text_field_widget.dart';
 import 'package:sips_cafe/src/core/config/colors.dart';
@@ -73,18 +74,25 @@ class MenuDesktopPage extends StatelessWidget {
                           },
                         ),
                         kSizedBox25,
-                        TextWidget(
-                          title: 'Special menu for you',
-                          fontSize: screenSize.width * 0.012,
+                        Row(
+                          children: [
+                            TextWidget(
+                              title: 'Special menu for you',
+                              fontSize: screenSize.width * 0.012,
+                            ),
+                            const Spacer(),
+                            CustomIconButtonWidget(
+                              iconSize: screenSize.width * 0.02,
+                              titleFontSize: screenSize.width * 0.012,
+                              contentFontSize: screenSize.width * 0.01,
+                            ),
+                          ],
                         ),
                         kSizedBox25,
                         BlocBuilder<MenuBloc, MenuState>(
                           builder: (context, state) {
                             return MenuItemDesktopWidget(
                               menuItems: state.filteredMenu,
-                              titleFontSize: screenSize.width * 0.01,
-                              subTitleFontSize: screenSize.width * 0.008,
-                              iconSize: screenSize.width * 0.013,
                             );
                           },
                         ),

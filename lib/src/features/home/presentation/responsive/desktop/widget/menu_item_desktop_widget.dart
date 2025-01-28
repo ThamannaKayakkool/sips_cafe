@@ -1,62 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sips_cafe/src/core/config/colors.dart';
-import 'package:sips_cafe/src/core/config/constants.dart';
 import 'package:sips_cafe/src/core/config/styles.dart';
-import 'package:sips_cafe/src/core/utils/utils.dart';
 import 'package:sips_cafe/src/features/home/presentation/bloc/cart/cart_bloc.dart';
 import 'package:sips_cafe/src/features/home/presentation/bloc/menu/menu_bloc.dart';
 
-class MenuItemMobileWidget extends StatelessWidget {
+class MenuItemDesktopWidget extends StatelessWidget {
   final List<Map<String, dynamic>> menuItems;
 
-  const MenuItemMobileWidget({
+  const MenuItemDesktopWidget({
     super.key,
     required this.menuItems,
   });
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = Utils().getScreenSize(context);
+    Size screenSize = MediaQuery.of(context).size;
+
     return BlocBuilder<MenuBloc, MenuState>(
       builder: (context, state) {
         int gridCount = state.gridCount;
         double childAspectRatio = 1.0;
 
-        double imageWidth, imageHeight,titleFontSize,subtitleFontSize,iconSize;
+        double imageWidth, imageHeight;
         switch (gridCount) {
           case 1:
-            childAspectRatio = 3.0;
-            imageWidth = screenSize.width * 0.91;
-            imageHeight = screenSize.height * 0.9;
-            titleFontSize=screenSize.width * 0.033;
-            subtitleFontSize=screenSize.width * 0.03;
-            iconSize=screenSize.width * 0.04;
+            childAspectRatio = 2.8;
+            imageWidth = screenSize.width * 0.7;
+            imageHeight = screenSize.height * 0.4;
             break;
           case 2:
-            childAspectRatio = 1.0;
-            imageWidth = screenSize.width * 0.43;
-            imageHeight = screenSize.height * 0.2;
-            titleFontSize=screenSize.width * 0.03;
-            subtitleFontSize=screenSize.width * 0.02;
-            iconSize=screenSize.width * 0.04;
+            childAspectRatio = 1.7;
+            imageWidth = screenSize.width * 0.34;
+            imageHeight = screenSize.height * 0.34;
             break;
           case 3:
-            childAspectRatio = 1.5;
-            imageWidth = screenSize.width * 0.26;
-            imageHeight = screenSize.height * 0.29;
-            titleFontSize=screenSize.width * 0.02;
-            subtitleFontSize=screenSize.width * 0.015;
-            iconSize=screenSize.width * 0.026;
+            childAspectRatio = 1.4;
+            imageWidth = screenSize.width * 0.25;
+            imageHeight = screenSize.height * 0.25;
             break;
           case 4:
           default:
             childAspectRatio = 1.0;
             imageWidth = screenSize.width * 0.2;
             imageHeight = screenSize.height * 0.2;
-            titleFontSize=screenSize.width * 0.014;
-            subtitleFontSize=screenSize.width * 0.01;
-            iconSize=screenSize.width * 0.03;
             break;
         }
 
@@ -74,11 +61,12 @@ class MenuItemMobileWidget extends StatelessWidget {
             itemCount: menuItems.length,
             itemBuilder: (context, index) {
               final items = menuItems[index];
+
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Flexible(
-                    flex: 3,
+                    flex: 4,
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -95,41 +83,40 @@ class MenuItemMobileWidget extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    flex: 1,
+                    flex: 2,
                     child: ListTile(
                       title: Text(
                         "${items['name']}",
                         style: getSemiBoldStyle(
-                          fontSize: titleFontSize,
+                          fontSize: screenSize.width * 0.01,
                           color: ColorsManager.blackColor,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
                       subtitle: Text(
-                        " \$${items['price']}",
+                        "\$${items['price']}",
                         style: getMediumStyle(
-                          fontSize: subtitleFontSize,
+                          fontSize: screenSize.width * 0.008,
                           color: ColorsManager.blackColor,
                         ),
                       ),
                       trailing: IconButton(
-                          onPressed: () {
-                            context.read<CartBloc>().add(AddItemEvent(
-                              id: items['name'].hashCode,
-                              image: items['image'],
-                              name: items['name'],
-                              price: double.tryParse(items['price']) ?? 0.0,
-                              quantity: 1,
-                            ));
-                          },
-                          icon: Icon(
-                            Icons.shopping_cart_outlined,
-                            color: ColorsManager.greenColor,
-                            size: iconSize,
-                          )),
+                        onPressed: () {
+                          context.read<CartBloc>().add(AddItemEvent(
+                                id: items['name'].hashCode,
+                                image: items['image'],
+                                name: items['name'],
+                                price: double.tryParse(items['price']) ?? 0.0,
+                                quantity: 1,
+                              ));
+                        },
+                        icon: Icon(
+                          Icons.shopping_cart_outlined,
+                          color: ColorsManager.greenColor,
+                          size: screenSize.width * 0.013,
+                        ),
+                      ),
                     ),
                   ),
-                  kSizedBox10,
                 ],
               );
             },

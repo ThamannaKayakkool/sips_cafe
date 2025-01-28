@@ -19,6 +19,7 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
         )) {
     on<SelectCategoryEvent>(_selectCategoryHandler);
     on<SearchMenuEvent>(_searchMenuHandler);
+    on<UpdateGridCountEvent>(_updateGridCountHandler);
   }
 
   void _selectCategoryHandler(
@@ -52,6 +53,10 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
       searchQuery: event.query,
       filteredMenu: searchedMenu,
     ));
+  }
+  void _updateGridCountHandler(
+      UpdateGridCountEvent event, Emitter<MenuState> emit) async {
+emit(state.copyWith(gridCount: event.gridCount));
   }
 
   static List<String> _extractCategories(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sips_cafe/src/core/common/widgets/custom_icon_button_widget.dart';
 import 'package:sips_cafe/src/core/common/widgets/rich_text_widget.dart';
 import 'package:sips_cafe/src/core/common/widgets/search_text_field_widget.dart';
 import 'package:sips_cafe/src/core/common/widgets/text_widget.dart';
@@ -21,7 +22,7 @@ class MenuMobilePage extends StatelessWidget {
       backgroundColor: ColorsManager.whiteColor,
       appBar: AppBar(
         backgroundColor: ColorsManager.whiteColor,
-        title: RichTextWidget(fontSize: screenSize.width * 0.065),
+        title: RichTextWidget(fontSize: screenSize.width * 0.05),
         centerTitle: true,
         actions: [
           IconButton(
@@ -48,13 +49,13 @@ class MenuMobilePage extends StatelessWidget {
             SearchTextFieldWidget(
               width: screenSize.width * 0.7,
               height: screenSize.height * 0.04,
-              hintFontSize: screenSize.width * 0.035,
-              textFontSize: screenSize.width * 0.035,
+              hintFontSize: screenSize.width * 0.03,
+              textFontSize: screenSize.width * 0.03,
             ),
             kSizedBox25,
             TextWidget(
               title: 'Categories',
-              fontSize: screenSize.width * 0.045,
+              fontSize: screenSize.width * 0.035,
             ),
             kSizedBox20,
             BlocBuilder<MenuBloc, MenuState>(
@@ -69,9 +70,19 @@ class MenuMobilePage extends StatelessWidget {
               },
             ),
             kSizedBox25,
-            TextWidget(
-              title: 'Special menu for you',
-              fontSize: screenSize.width * 0.045,
+            Row(
+              children: [
+                TextWidget(
+                  title: 'Special menu for you',
+                  fontSize: screenSize.width * 0.035,
+                ),
+                const Spacer(),
+                CustomIconButtonWidget(
+                  iconSize: screenSize.width * 0.045,
+                  titleFontSize: screenSize.width * 0.025,
+                  contentFontSize: screenSize.width * 0.022,
+                ),
+              ],
             ),
             kSizedBox25,
             BlocBuilder<MenuBloc, MenuState>(
