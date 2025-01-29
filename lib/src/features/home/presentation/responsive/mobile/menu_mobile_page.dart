@@ -79,8 +79,8 @@ class MenuMobilePage extends StatelessWidget {
                 const Spacer(),
                 CustomIconButtonWidget(
                   iconSize: screenSize.width * 0.045,
-                  titleFontSize: screenSize.width * 0.025,
-                  contentFontSize: screenSize.width * 0.022,
+                  titleFontSize: screenSize.width * 0.035,
+                  contentFontSize: screenSize.width * 0.03,
                 ),
               ],
             ),

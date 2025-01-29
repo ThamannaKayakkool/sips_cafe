@@ -149,7 +149,7 @@ final List<Map<String, dynamic>> menuAllItem = [
   },
   {
     "image": Assets.blueBerrySmoothie,
-    "name": "Blue Berry Smoothie",
+    "name": "Blueberry Smoothie",
     "price": "38.06",
     "category": "Juice"
   },
@@ -179,13 +179,13 @@ final List<Map<String, dynamic>> menuAllItem = [
   },
   {
     "image": Assets.cheesyBakedPasta,
-    "name": "Cheesy Baked Pasta",
+    "name": "Cheesy Pasta",
     "price": "45.09",
     "category": "Pasta"
   },
   {
     "image": Assets.crispyCheeseBurger,
-    "name": "Crispy CheeseBurger",
+    "name": "CheeseBurger",
     "price": "20.01",
     "category": "Burger"
   },
@@ -221,7 +221,7 @@ final List<Map<String, dynamic>> menuAllItem = [
   },
   {
     "image": Assets.bbqChickenBurger,
-    "name": "BBQ Chicken Burger",
+    "name": "BBQ Burger",
     "price": "25.11",
     "category": "Burger"
   },

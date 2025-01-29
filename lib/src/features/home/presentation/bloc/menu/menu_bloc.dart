@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:path/path.dart';
 import 'package:sips_cafe/src/core/config/constants.dart';
 import 'package:sips_cafe/src/core/utils/typedefs.dart';
+import 'package:sips_cafe/src/core/utils/utils.dart';
 
 part 'menu_event.dart';
 
@@ -10,12 +12,13 @@ part 'menu_state.dart';
 class MenuBloc extends Bloc<MenuEvent, MenuState> {
   final List<Map<String, dynamic>> menuAllItem;
 
-  MenuBloc({required this.menuAllItem})
+  MenuBloc({required this.menuAllItem,required double screenWidth})
       : super(MenuState(
           selectedCategory: 'All Menu',
           searchQuery: '',
           filteredMenu: menuAllItem,
           categories: _extractCategories(menuAllItem),
+    gridCount: _gridCount(screenWidth),
         )) {
     on<SelectCategoryEvent>(_selectCategoryHandler);
     on<SearchMenuEvent>(_searchMenuHandler);
@@ -65,5 +68,12 @@ emit(state.copyWith(gridCount: event.gridCount));
         menuAllItem.map((item) => item['category']).toSet().toList();
     categories.insert(0, 'All Menu');
     return category;
+  }
+  static int _gridCount(double screenWidth) {
+    if (screenWidth < 600) {
+      return 2;
+    } else {
+      return 4;
+    }
   }
 }
