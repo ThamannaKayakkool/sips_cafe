@@ -6,7 +6,9 @@ import 'package:sips_cafe/src/core/common/widgets/search_text_field_widget.dart'
 import 'package:sips_cafe/src/core/common/widgets/text_widget.dart';
 import 'package:sips_cafe/src/core/config/colors.dart';
 import 'package:sips_cafe/src/core/config/constants.dart';
+import 'package:sips_cafe/src/core/config/styles.dart';
 import 'package:sips_cafe/src/core/utils/utils.dart';
+import 'package:sips_cafe/src/features/home/presentation/bloc/cart/cart_bloc.dart';
 import 'package:sips_cafe/src/features/home/presentation/bloc/menu/menu_bloc.dart';
 import 'package:sips_cafe/src/features/home/presentation/responsive/tablet/order_tablet_page.dart';
 import 'package:sips_cafe/src/features/home/presentation/responsive/tablet/widget/menu_container_tablet_widget.dart';
@@ -19,7 +21,7 @@ class MenuTabletPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size screenSize = Utils().getScreenSize(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorsManager.whiteColor,
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: screenSize.width * 0.01,
@@ -38,18 +40,54 @@ class MenuTabletPage extends StatelessWidget {
                   textFontSize: screenSize.width * 0.015,
                 ),
                 const Spacer(),
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const OrderTabletPage(),
-                          ));
-                    },
-                    icon: Icon(
-                      Icons.shopping_cart_outlined,
-                      color: ColorsManager.greenColor,
-                    ))
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    int itemCount = 0;
+                    if (state is CartLoaded) {
+                      itemCount = state.items.length;
+                    }
+
+                    return Stack(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OrderTabletPage(),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.shopping_cart_outlined,
+                            color: ColorsManager.greenColor,
+                          ),
+                        ),
+                        if (itemCount > 0)
+                          Positioned(
+                            right: 6,
+                            top: 6,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 18,
+                                minHeight: 18,
+                              ),
+                              child: Text(
+                                '$itemCount',
+                                style: getBoldStyle(fontSize: 12, color:ColorsManager.whiteColor),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
             kSizedBox25,
